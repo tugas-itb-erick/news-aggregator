@@ -1,44 +1,81 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Xml;
 using System.ServiceModel.Syndication;
+using System.Linq;
+using System.Text;
+using System.Net;
+using HtmlAgilityPack;
+using System.Text.RegularExpressions;
 
 namespace news_search
 {
-    static class Program
+    class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        static string[] loadRSS()
         {
-            /*Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());*/
+            System.IO.StreamReader file = new System.IO.StreamReader("../../../../rss.txt");
+            List<string> rss = new List<string>();
+            string line;
 
-            /*XmlDocument doc = new XmlDocument();
-            doc.Load("http://www.antaranews.com/rss/terkini");
-            int i = 0;
-            foreach(XmlNode node in doc.DocumentElement.ChildNodes)
+            while((line = file.ReadLine()) != null)
             {
-                string text = node.InnerText;
-                Console.WriteLine(i++);
-                Console.WriteLine(text);
-            }*/
+                rss.Add(line);
+            }
 
-            XmlReader reader = XmlReader.Create("http://www.antaranews.com/rss/terkini");
-            SyndicationFeed feed = SyndicationFeed.Load(reader);
-            reader.Close();
-            foreach(SyndicationItem item in feed.Items)
+            return rss.ToArray();
+        }
+
+        static void Main(string[] args)
+        {
+            string[] rss = loadRSS();
+            foreach(string rssLink in rss)
             {
-                String title = item.Title.Text;
-                String date = item.PublishDate.ToString();
-                Console.WriteLine(title);
-                Console.WriteLine(date);
+                Console.Write(rssLink);
+
+                // Parse XML from RSS link
+                XmlReader reader = XmlReader.Create(rssLink);
+                SyndicationFeed feed = SyndicationFeed.Load(reader);
+                reader.Close();
+
+                // Iterate every item (news)
+                foreach (SyndicationItem item in feed.Items)
+                {
+                    String title = item.Title.Text;
+                    String link = item.Links.First().Uri.ToString(); // TODO: Add try-catch block
+                    String date = item.PublishDate.ToString();
+                    Console.WriteLine("Date: " + date);
+                    Console.WriteLine("Title: " + title);
+                    Console.WriteLine("Link: " + link);
+                    Console.WriteLine("Content: ");
+
+                    // Parse HTML Page
+                    String html;
+                    using (var client = new WebClient())
+                    {
+                        html = client.DownloadString(link); // TODO: Add try-catch block
+                    }
+                    HtmlDocument doc = new HtmlDocument();
+                    doc.LoadHtml(html);
+                    doc.DocumentNode.Descendants()
+                        .Where(n => n.Name == "script" || n.Name == "style" || n.Name == "#comment" || n.Name == "li")
+                        .ToList()
+                        .ForEach(n => n.Remove());
+
+                    // Save HTML Content to String
+                    StringBuilder sb = new StringBuilder();
+                    foreach (HtmlTextNode node in doc.DocumentNode.SelectNodes("//text()"))
+                    {
+                        sb.AppendLine(node.Text);
+                    }
+                    String content = sb.ToString().Replace("\n", ""); // TODO: fix \n replacement
+
+                    Console.WriteLine(content);
+
+
+                    Console.WriteLine();
+                    Console.ReadKey();
+                }
             }
 
         }

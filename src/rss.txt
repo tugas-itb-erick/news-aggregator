@@ -1,0 +1,3 @@
+http://rss.detik.com/index.php/detikcom
+http://rss.vivanews.com/get/all
+http://www.antaranews.com/rss/terkini
