@@ -36,15 +36,16 @@ namespace news_search
         {
             foreach (string rssLink in rss)
             {
-                // Parse XML from RSS link
-                XmlReader reader = XmlReader.Create(rssLink);
-                SyndicationFeed feed = SyndicationFeed.Load(reader);
-                reader.Close();
-
-                // Iterate every item (news)
-                foreach (SyndicationItem item in feed.Items)
+                try
                 {
-                    try
+                    // Parse XML from RSS link
+                    int tes = 0;
+                    XmlReader reader = XmlReader.Create(rssLink);
+                    SyndicationFeed feed = SyndicationFeed.Load(reader); // add try catch
+                    reader.Close();
+
+                    // Iterate every item (news)
+                    foreach (SyndicationItem item in feed.Items)
                     {
                         String title = item.Title.Text;
                         DateTimeOffset date = item.PublishDate;
@@ -52,11 +53,13 @@ namespace news_search
                         String contentURL = item.Links.First().Uri.ToString();
 
                         news.Add(new news_search.News(title, date, imageURL, contentURL));
+                        tes++;
+                        Console.WriteLine(tes);
                     }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
                 }
             }
         }
@@ -69,14 +72,24 @@ namespace news_search
 
         static void Main(string[] args)
         {
-            init();
+            /*init();*/
 
-            /*for(int i=0; i<news.Size(); i++)
+            News n = new News("tes", new DateTimeOffset(), "", "http://news.detik.com/read/2017/04/26/153056/3484462/727/kota-mandiri-masa-depan-hadirkan-cbd-dan-hunian-di-satu-kawasan");
+            int x = n.SearchContentWithBM("Tangerang");
+            Console.WriteLine(x + n.GetContentSummary(x));
+            news.Add(n);
+
+
+            /*List<Tuple<int, int>> result = new List<Tuple<int, int>>();
+            result = news.GetSearchResultWithKMP("Ahok");
+            for(int i=0; i<result.Count; i++)
             {
-                News n = news.Get(i);
-            }*/
-
-            Console.WriteLine(news.ToString());
+                Console.WriteLine(result[i].Item1 + " " + result[i].Item2);
+                if ((result[i].Item2 > 20) && (news.Get(i).GetContent().Length > result[i].Item2 + 40))
+                    Console.WriteLine(news.Get(i).GetContentSummary(result[i].Item2));
+            }
+            Console.ReadKey();
+            Console.WriteLine(1024);*/
             Console.ReadKey();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,7 +29,7 @@ namespace news_search
         public void Add(News x)
         {
             int i = data.Count;
-            while ((i > 0) && (data[i-1].getDate().CompareTo(x.getDate()) > 0))
+            while ((i > 0) && (data[i-1].GetDate().CompareTo(x.GetDate()) > 0))
             {
                 i--;
             }
@@ -63,6 +64,25 @@ namespace news_search
         public int Size()
         {
             return data.Count;
+        }
+
+        /*
+         * First int: index of data
+         * Second int: index found, needed to get summary
+         */
+        public List<Tuple<int,int>> GetSearchResultWithKMP(string pattern)
+        {
+            List<Tuple<int, int>> result = new List<Tuple<int, int>>();
+            for(int i=0; i<data.Count; i++)
+            {
+                int indexFound = data[i].SearchContentWithKMP(pattern);
+                if (indexFound != Matcher.NOT_FOUND)
+                {
+                    result.Add(new Tuple<int, int>(i, indexFound));
+                }
+            }
+
+            return result;
         }
 
     }

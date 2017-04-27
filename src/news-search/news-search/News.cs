@@ -14,6 +14,7 @@ namespace news_search
         private DateTimeOffset date;
         private String imageURL;
         private String contentURL;
+        private String content;
 
         /*
          * Constructor.
@@ -23,6 +24,7 @@ namespace news_search
             title = "Untitled";
             imageURL = "error";
             contentURL = "error";
+            content = "error";
         }
 
         /*
@@ -34,15 +36,9 @@ namespace news_search
             this.date = date;
             this.imageURL = imageURL;
             this.contentURL = contentURL;
-        }
 
-        /* Return the news content from contentURL.
-         * May throw exception.
-         */
-        private string GetContent()
-        {
             string html;
-            
+
             // Load HTML from content URL
             using (var client = new WebClient())
             {
@@ -64,43 +60,34 @@ namespace news_search
                 sb.Append(node.Text);
             }
 
-            return sb.ToString();//.Replace("\n\n", "");
+            // delete all enters (CAN CAUSE NEWS TO BE DELETED!!!)
+            this.content = sb.ToString().Replace("\n", "");
         }
 
-        public string SearchContentWithKMP(string pattern)
+        public int SearchContentWithKMP(string pattern)
         {
-            const int delta = 20;
-            string text = GetContent();
-
-            int indexFound = Matcher.kmpMatch(text, pattern);
-            if (indexFound == Matcher.NOT_FOUND)
-                return "";
-            else
-                return text.Substring(indexFound-delta, delta*2);
+            return Matcher.kmpMatch(content, pattern);
         }
 
-        public string SearchContentWithBM(string pattern)
+        public int SearchContentWithBM(string pattern)
         {
-            const int delta = 20;
-            string text = GetContent();
-
-            int indexFound = Matcher.bmMatch(text, pattern);
-            if (indexFound == Matcher.NOT_FOUND)
-                return "";
-            else
-                return text.Substring(indexFound - delta, delta * 2);
+            return Matcher.bmMatch(content, pattern);
         }
 
-        public string SearchContentWithRegex(string pattern)
+        public int SearchContentWithRegex(string pattern)
         {
-            const int delta = 20;
-            string text = GetContent();
+            return Matcher.bmMatch(content, pattern);
+        }
 
-            int indexFound = Matcher.regexMatch(text, pattern);
-            if (indexFound == Matcher.NOT_FOUND)
-                return "";
-            else
-                return text.Substring(indexFound - delta, delta * 2);
+        /*
+         * MASIH BISA SALAH
+         * masih asumsi indexFound harus > delta
+         */
+        public string GetContentSummary(int indexFound)
+        {
+            const int delta = 120;
+            const string dots = "...";
+            return dots + content.Substring(indexFound - delta, delta * 2) + dots;
         }
 
         /*
@@ -118,42 +105,47 @@ namespace news_search
         }
 
         /* Getter and Setter */
-        public String getTitle()
+        public string GetContent()
+        {
+            return content;
+        }
+
+        public string GetTitle()
         {
             return title;
         }
 
-        public void setTitle(String title)
+        public void SetTitle(string title)
         {
             this.title = title;
         }
 
-        public DateTimeOffset getDate()
+        public DateTimeOffset GetDate()
         {
             return date;
         }
 
-        public void setDate(DateTimeOffset date)
+        public void SetDate(DateTimeOffset date)
         {
             this.date = date;
         }
 
-        public String getImageURL()
+        public string GetImageURL()
         {
             return imageURL;
         }
 
-        public void setImageURL(String imageURL)
+        public void SetImageURL(string imageURL)
         {
             this.imageURL = imageURL;
         }
 
-        public String getContentURL()
+        public string GetContentURL()
         {
             return contentURL;
         }
 
-        public void setContentURL(String contentURL)
+        public void SetContentURL(string contentURL)
         {
             this.contentURL = contentURL;
         }
