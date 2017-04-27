@@ -81,7 +81,7 @@ namespace news_search
             */
 
             List<Tuple<int, int>> result = new List<Tuple<int, int>>();
-            result = news.GetSearchResultWithKMP("Ahok");
+            result = news.GetSearchResultWithBM("Ahok");
             for(int i=0; i<result.Count; i++)
             {
                 Console.WriteLine(result[i].Item1 + " " + result[i].Item2 + " " + news.Get(result[i].Item1).GetContentSummary(result[i].Item2));

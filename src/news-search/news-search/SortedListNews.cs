@@ -26,7 +26,7 @@ namespace news_search
         public void Add(News x)
         {
             int i = data.Count;
-            while ((i > 0) && (data[i-1].GetDate().CompareTo(x.GetDate()) > 0))
+            while ((i > 0) && (data[i-1].GetDate().CompareTo(x.GetDate()) < 0))
             {
                 i--;
             }
@@ -72,7 +72,45 @@ namespace news_search
             List<Tuple<int, int>> result = new List<Tuple<int, int>>();
             for(int i=0; i<data.Count; i++)
             {
-                int indexFound = data[i].SearchContentWithKMP(pattern);
+                int indexFound = data[i].SearchContentWithKMP(pattern.ToLower());
+                if (indexFound != Matcher.NOT_FOUND)
+                {
+                    result.Add(new Tuple<int, int>(i, indexFound));
+                }
+            }
+
+            return result;
+        }
+
+        /*
+         * First int: index of data
+         * Second int: index found, needed to get summary
+         */
+        public List<Tuple<int, int>> GetSearchResultWithBM(string pattern)
+        {
+            List<Tuple<int, int>> result = new List<Tuple<int, int>>();
+            for (int i = 0; i < data.Count; i++)
+            {
+                int indexFound = data[i].SearchContentWithBM(pattern.ToLower());
+                if (indexFound != Matcher.NOT_FOUND)
+                {
+                    result.Add(new Tuple<int, int>(i, indexFound));
+                }
+            }
+
+            return result;
+        }
+
+        /*
+         * First int: index of data
+         * Second int: index found, needed to get summary
+         */
+        public List<Tuple<int, int>> GetSearchResultWithRegex(string pattern)
+        {
+            List<Tuple<int, int>> result = new List<Tuple<int, int>>();
+            for (int i = 0; i < data.Count; i++)
+            {
+                int indexFound = data[i].SearchContentWithRegex(pattern.ToLower());
                 if (indexFound != Matcher.NOT_FOUND)
                 {
                     result.Add(new Tuple<int, int>(i, indexFound));

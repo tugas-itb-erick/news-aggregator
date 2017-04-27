@@ -72,58 +72,87 @@ namespace news_search
          */
         public static int bmMatch(string text, string pattern)
         {
-            int[] last = buildLast(pattern);
-            int n = text.Length;
-            int m = pattern.Length;
-            int i = m - 1;
-
-            if (i > n - 1)
+            if (pattern.Length == 0)
             {
-                return -1;
+                return NOT_FOUND;
             }
+            int[] charTable = makeCharTable(pattern);
+            int[] jumpTable = makeJumpTable(pattern);
 
-            int j = m - 1;
-            do
+            for (int i = pattern.Length - 1, j; i < text.Length;)
             {
-                if (pattern[j] == text[i])
+                for (j = pattern.Length - 1; pattern[j] == text[i]; --i, --j)
                 {
                     if (j == 0)
                     {
                         return i;
                     }
-                    else
-                    {
-                        i--;
-                        j--;
-                    }
                 }
-                else
-                {
-                    int loc = last[text[i]];
-                    i += m - Math.Min(j, 1 + loc);
-                    j = m - 1;
-                }
-            } while (i <= n - 1);
+                i += Math.Max(jumpTable[pattern.Length - 1 - j], charTable[text[i]]);
+            }
 
             return NOT_FOUND;
         }
 
-        private static int[] buildLast(string pattern)
+        private static int[] makeCharTable(string pattern)
         {
-            const int ASCII_SET = 128;
-            int[] last = new int[ASCII_SET];
-
-            for (int i = 0; i < ASCII_SET; i++)
+            const int ALPHABET_SIZE = Char.MaxValue + 1;
+            int[] table = new int[ALPHABET_SIZE];
+            for (int i = 0; i < table.Length; ++i)
             {
-                last[i] = -1;
+                table[i] = pattern.Length;
             }
-
-            for (int i = 0; i < pattern.Length; i++)
+            for (int i = 0; i < pattern.Length - 1; ++i)
             {
-                last[pattern[i]] = i;
+                table[pattern[i]] = pattern.Length - 1 - i;
             }
+            return table;
+        }
 
-            return last;
+        private static int[] makeJumpTable(string pattern)
+        {
+            int[] table = new int[pattern.Length];
+            int lastPrefixPosition = pattern.Length;
+            for (int i = pattern.Length - 1; i >= 0; --i)
+            {
+                if (isPrefix(pattern, i + 1))
+                {
+                    lastPrefixPosition = i + 1;
+                }
+                table[pattern.Length - 1 - i] = lastPrefixPosition - i + pattern.Length - 1;
+            }
+            for (int i = 0; i < pattern.Length - 1; ++i)
+            {
+                int slen = suffixLength(pattern, i);
+                table[slen] = pattern.Length - 1 - i + slen;
+            }
+            return table;
+        }
+
+        private static bool isPrefix(string pattern, int p)
+        {
+            for (int i = p, j = 0; i < pattern.Length; ++i, ++j)
+            {
+                if (pattern[i] != pattern[j])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /**
+         * Returns the maximum length of the substring ends at p and is a suffix.
+         */
+        private static int suffixLength(string needle, int p)
+        {
+            int len = 0;
+            for (int i = p, j = needle.Length - 1;
+                     i >= 0 && needle[i] == needle[j]; --i, --j)
+            {
+                len += 1;
+            }
+            return len;
         }
 
         /*

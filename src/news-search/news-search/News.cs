@@ -61,7 +61,9 @@ namespace news_search
             }
 
             // delete all enters (CAN CAUSE NEWS TO BE DELETED!!!)
-            this.content = sb.ToString().Replace("\n", "");
+            content = sb.ToString().Replace("\n", "");
+
+            content = content.ToLower();
         }
 
         public int SearchContentWithKMP(string pattern)
@@ -76,7 +78,7 @@ namespace news_search
 
         public int SearchContentWithRegex(string pattern)
         {
-            return Matcher.bmMatch(content, pattern);
+            return Matcher.regexMatch(content, pattern);
         }
 
         /*
