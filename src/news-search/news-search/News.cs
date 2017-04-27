@@ -81,13 +81,24 @@ namespace news_search
 
         /*
          * MASIH BISA SALAH
-         * masih asumsi indexFound harus > delta
+         * asumsi length berita > delta*2
          */
         public string GetContentSummary(int indexFound)
         {
             const int delta = 120;
             const string dots = "...";
-            return dots + content.Substring(indexFound - delta, delta * 2) + dots;
+            if (indexFound <= delta)
+            {
+                return dots + content.Substring(0, delta * 2) + dots;
+            }
+            else if (indexFound + delta > content.Length)
+            {
+                return dots + content.Substring(content.Length - delta * 2 - 1, delta * 2);
+            }
+            else
+            {
+                return dots + content.Substring(indexFound - delta, delta * 2) + dots;
+            }
         }
 
         /*

@@ -41,7 +41,7 @@ namespace news_search
                     // Parse XML from RSS link
                     int tes = 0;
                     XmlReader reader = XmlReader.Create(rssLink);
-                    SyndicationFeed feed = SyndicationFeed.Load(reader); // add try catch
+                    SyndicationFeed feed = SyndicationFeed.Load(reader);
                     reader.Close();
 
                     // Iterate every item (news)
@@ -72,24 +72,22 @@ namespace news_search
 
         static void Main(string[] args)
         {
-            /*init();*/
+            init();
 
-            News n = new News("tes", new DateTimeOffset(), "", "http://news.detik.com/read/2017/04/26/153056/3484462/727/kota-mandiri-masa-depan-hadirkan-cbd-dan-hunian-di-satu-kawasan");
+            /*News n = new News("tes", new DateTimeOffset(), "", "http://news.detik.com/read/2017/04/26/153056/3484462/727/kota-mandiri-masa-depan-hadirkan-cbd-dan-hunian-di-satu-kawasan");
             int x = n.SearchContentWithBM("Tangerang");
             Console.WriteLine(x + n.GetContentSummary(x));
             news.Add(n);
+            */
 
-
-            /*List<Tuple<int, int>> result = new List<Tuple<int, int>>();
+            List<Tuple<int, int>> result = new List<Tuple<int, int>>();
             result = news.GetSearchResultWithKMP("Ahok");
             for(int i=0; i<result.Count; i++)
             {
-                Console.WriteLine(result[i].Item1 + " " + result[i].Item2);
-                if ((result[i].Item2 > 20) && (news.Get(i).GetContent().Length > result[i].Item2 + 40))
-                    Console.WriteLine(news.Get(i).GetContentSummary(result[i].Item2));
+                Console.WriteLine(result[i].Item1 + " " + result[i].Item2 + " " + news.Get(result[i].Item1).GetContentSummary(result[i].Item2));
             }
             Console.ReadKey();
-            Console.WriteLine(1024);*/
+            Console.WriteLine(1024);
             Console.ReadKey();
         }
     }

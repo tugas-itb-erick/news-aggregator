@@ -9,9 +9,6 @@ namespace news_search
 {
     class SortedListNews
     {
-        // Static instance
-        public static SortedListNews news = new SortedListNews();
-
         private List<News> data;
 
         /*
