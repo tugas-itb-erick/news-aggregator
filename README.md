@@ -1,16 +1,16 @@
 # news-search
-Tugas Besar 3 IF2211 Strategi Algoritma 
+### Tugas Besar 3 IF2211 Strategi Algoritma 
 
-Deskripsi:
+### Deskripsi
 News Aggregator yang dapat menampilkan berita-berita terbaru dari RSS detik, tempo, viva, dan antara news.
 
-Run:
+### Run
 src -> WebApplication2 -> index.html
 
-Contributors:
+### Contributors:
 13515057 - Erick Wijaya
 13515063 - Kezia Suhendra
 13515111 - Catherine Almira
 
-![alt text](screenshot/sc1.jpg "Halaman Utama")
-![alt text](screenshot/sc4.jpg "Halaman Pencarian")
+![alt](screenshot/sc1.JPG "Menu Utama")
+![alt](screenshot/sc4.JPG "Halaman Pencarian")
