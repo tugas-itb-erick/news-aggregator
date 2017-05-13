@@ -12,5 +12,5 @@ Contributors:
 13515063 - Kezia Suhendra
 13515111 - Catherine Almira
 
-![alt text](screenshot/s1.jpg "Halaman Utama")
-![alt text](screenshot/s4.jpg "Halaman Pencarian")
+![alt text](screenshot/sc1.jpg "Halaman Utama")
+![alt text](screenshot/sc4.jpg "Halaman Pencarian")
