@@ -223,7 +223,11 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Algo\rss.txt" />
+    <Content Include="algo\rss.txt" />
+    <Content Include="Video.html" />
+    <Content Include="Map.png" />
+    <Content Include="marsh.jpg" />
+    <Content Include="movie.png" />
     <Content Include="Search.aspx" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="giphy.gif" />
@@ -386,10 +390,10 @@
     <Compile Include="Account\VerifyPhoneNumber.aspx.designer.cs">
       <DependentUpon>VerifyPhoneNumber.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Algo\MainProgram.cs" />
-    <Compile Include="Algo\Matcher.cs" />
-    <Compile Include="Algo\News.cs" />
-    <Compile Include="Algo\SortedListNews.cs" />
+    <Compile Include="algo\MainProgram.cs" />
+    <Compile Include="algo\Matcher.cs" />
+    <Compile Include="algo\News.cs" />
+    <Compile Include="algo\SortedListNews.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>

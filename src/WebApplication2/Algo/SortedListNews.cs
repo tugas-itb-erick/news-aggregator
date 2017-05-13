@@ -9,7 +9,7 @@ namespace algo
 {
     public class SortedListNews
     {
-        public List<News> data;
+        private List<News> data;
 
         /*
          * Constructor.
@@ -72,7 +72,7 @@ namespace algo
             List<Tuple<int, int>> result = new List<Tuple<int, int>>();
             for(int i=0; i<data.Count; i++)
             {
-                int indexFound = data[i].SearchContentWithKMP(pattern.ToLower());
+                int indexFound = data[i].SearchContentWithKMP(pattern);
                 if (indexFound != Matcher.NOT_FOUND)
                 {
                     result.Add(new Tuple<int, int>(i, indexFound));
@@ -91,7 +91,7 @@ namespace algo
             List<Tuple<int, int>> result = new List<Tuple<int, int>>();
             for (int i = 0; i < data.Count; i++)
             {
-                int indexFound = data[i].SearchContentWithBM(pattern.ToLower());
+                int indexFound = data[i].SearchContentWithBM(pattern);
                 if (indexFound != Matcher.NOT_FOUND)
                 {
                     result.Add(new Tuple<int, int>(i, indexFound));
@@ -110,7 +110,7 @@ namespace algo
             List<Tuple<int, int>> result = new List<Tuple<int, int>>();
             for (int i = 0; i < data.Count; i++)
             {
-                int indexFound = data[i].SearchContentWithRegex(pattern.ToLower());
+                int indexFound = data[i].SearchContentWithRegex(pattern);
                 if (indexFound != Matcher.NOT_FOUND)
                 {
                     result.Add(new Tuple<int, int>(i, indexFound));

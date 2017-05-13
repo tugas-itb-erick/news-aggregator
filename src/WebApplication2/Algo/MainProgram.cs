@@ -12,29 +12,31 @@ using System.Collections;
 
 namespace algo
 {
-    public class MainProgram
+   public class MainProgram
     {
         public static SortedListNews news = new SortedListNews();
         public static string[] rss;
 
-       public static void loadRSS()
+        public static void loadRSS()
         {
-            System.IO.StreamReader file = new System.IO.StreamReader("rss.txt");
+            /*System.IO.StreamReader file = new System.IO.StreamReader("rss.txt");
             List<string> links = new List<string>();
-            string line;
-            /*List<string> links = new List<string>();
+            string line;*/
+            List<string> links = new List<string>();
             links.Add("http://rss.detik.com/index.php/detikcom");
-            links.Add("http://www.antaranews.com/rss/terkini");*/
-            while ((line = file.ReadLine()) != null)
+            links.Add("http://www.antaranews.com/rss/terkini");
+            links.Add("http://rss.viva.co.id/get/all");
+            links.Add("https://rss.tempo.co/index.php/teco/news/feed/");
+            /*while ((line = file.ReadLine()) != null)
             {
                 links.Add(line);
-            }
+            }*/
 
             rss = links.ToArray();
         }
 
         /* I.S. string[] rss contains rss links */
-        public static void loadListNews()
+       public static void loadListNews()
         {
             foreach (string rssLink in rss)
             {
@@ -46,17 +48,37 @@ namespace algo
                     SyndicationFeed feed = SyndicationFeed.Load(reader);
                     reader.Close();
 
+                    /*XmlDocument doc = new XmlDocument();
+                    doc.Load(rssLink);
+                    XmlElement root = doc.DocumentElement;
+                    XmlNodeList feed = root.SelectNodes("/channel/item");*/
+
                     // Iterate every item (news)
                     foreach (SyndicationItem item in feed.Items)
                     {
-                        String title = item.Title.Text;
-                        DateTimeOffset date = item.PublishDate;
-                        String imageURL = Regex.Match(item.Summary.Text, "img src=(?:\"|\')?(?<imgSrc>[^>]*[^/].(?:jpg|bmp|gif|png))(?:\"|\')?").Groups[1].Value;
-                        String contentURL = item.Links.First().Uri.ToString();
+                        try
+                        {
+                            string title = item.Title.Text;
+                            DateTimeOffset date = item.PublishDate;
+                            string imageURL = "";
+                            string contentURL = item.Links.First().Uri.ToString();
+                            if (contentURL.Contains(News.TEMPO))
+                            {
+                                //imageURL = Regex.Match(item.Content.ToString(), "img src=(?:\"|\')?(?<imgSrc>[^>]*[^/].(?:jpg|bmp|gif|png))(?:\"|\')?").Groups[1].Value;
+                            }
+                            else
+                            {
+                                imageURL = Regex.Match(item.Summary.Text, "img src=(?:\"|\')?(?<imgSrc>[^>]*[^/].(?:jpg|bmp|gif|png))(?:\"|\')?").Groups[1].Value;
+                            }
 
-                        news.Add(new algo.News(title, date, imageURL, contentURL));
-                        tes++;
-                        Console.WriteLine(tes);
+                            news.Add(new News(title, date, imageURL, contentURL));
+                            tes++;
+                            Console.WriteLine(tes);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
                     }
                 }
                 catch (Exception e)
@@ -66,7 +88,7 @@ namespace algo
             }
         }
 
-        public static void init()
+        static void init()
         {
             loadRSS();
             loadListNews();
@@ -76,21 +98,26 @@ namespace algo
         {
             init();
 
-            /*News n = new News("tes", new DateTimeOffset(), "", "http://news.detik.com/read/2017/04/26/153056/3484462/727/kota-mandiri-masa-depan-hadirkan-cbd-dan-hunian-di-satu-kawasan");
-            int x = n.SearchContentWithBM("Tangerang");
-            Console.WriteLine(x + n.GetContentSummary(x));
-            news.Add(n);
-            */
-
             List<Tuple<int, int>> result = new List<Tuple<int, int>>();
-            result = news.GetSearchResultWithKMP("Ahok");
-            for(int i=0; i<result.Count; i++)
+            result = news.GetSearchResultWithBM("Ahok");
+            for (int i = 0; i < result.Count; i++)
             {
-                Console.WriteLine(result[i].Item1 + " " + result[i].Item2 + " " + news.Get(result[i].Item1).GetContentSummary(result[i].Item2));
+                Console.WriteLine(result[i].Item1 + " " + result[i].Item2 + "\n" + news.Get(result[i].Item1).GetContentSummary(result[i].Item2));
+                Console.ReadKey();
             }
+            Console.WriteLine("\n\n--DONE1--\n\n");
             Console.ReadKey();
-            Console.WriteLine(1024);
+
+            result.Clear();
+            result = news.GetSearchResultWithRegex("Ahok");
+            for (int i = 0; i < result.Count; i++)
+            {
+                Console.WriteLine(result[i].Item1 + " " + result[i].Item2 + "\n" + news.Get(result[i].Item1).GetContentSummary(result[i].Item2));
+                Console.ReadKey();
+            }
+            Console.WriteLine("\n\n--DONE1--\n\n");
             Console.ReadKey();
         }
     }
 }
+

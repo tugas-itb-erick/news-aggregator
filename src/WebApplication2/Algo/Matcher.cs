@@ -16,6 +16,11 @@ namespace algo
          */
         public static int kmpMatch(string text, string pattern)
         {
+            if (pattern.Length == 0)
+            {
+                return NOT_FOUND;
+            }
+
             int[] fail = computeFail(pattern);
             int i = 0, j = 0;
 
@@ -76,6 +81,7 @@ namespace algo
             {
                 return NOT_FOUND;
             }
+
             int[] charTable = makeCharTable(pattern);
             int[] jumpTable = makeJumpTable(pattern);
 
@@ -160,6 +166,11 @@ namespace algo
          */
         public static int regexMatch(string text, string pattern)
         {
+            if (pattern.Length == 0)
+            {
+                return NOT_FOUND;
+            }
+
             Regex ptr = new Regex(pattern);
             Match match = ptr.Match(text);
             if (!match.Success)

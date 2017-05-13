@@ -11,7 +11,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="emoji.png" />
-    <title>Borborygmutty | Result</title>
+    <title>Borborygmutty | Search</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.css" rel="stylesheet" />
@@ -39,14 +39,20 @@
                     <li id="home">
                         <a href="Index.html">Borborygmutty</a>
                     </li>
+                    <li id="search" class="active">
+                        <a href="Search.aspx"><span class="glyphicon glyphicon-search"></span></a>
+                    </li>
                 </ul>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav navbar-right">
+                    <li id="video">
+                        <a href="Video.html"><img src="movie.png" width="20" height="20" /></a>
+                    </li>
                     <li id="about">
-                        <a href="About.html">About</a>
+                        <a href="About.html"><span class="glyphicon glyphicon-user"></span> About</a>
                     </li>
                 </ul>
             </div>
@@ -102,70 +108,92 @@
 
             List<Tuple<int, int>> result = new List<Tuple<int, int>>();
 
-            if (optradio == "BoyerMoore")
+            if (keyword == "")
             {
-                if (Matcher.bmMatch(MainProgram.news.ToString(), keyword) == -1)
-                {
-                    Response.Write("<div class='row'><p align='center'>Search Not Found.</p></div>");
-                }
-                else
-                {
-                    Response.Write("<div class='row'><div class='col-sm-1'></div><div class='col-sm-11'><h5><B><I>Boyer Moore Algorithm</I></B></div></div>");
-                    result = MainProgram.news.GetSearchResultWithBM(keyword);
-                    for(int i=0; i<result.Count; i++)
-                    {
-                        //Response.Write("<div>"+MainProgram.news.Get(result[i].Item1).GetContentSummary(result[i].Item2)+"</div>");
-                        Response.Write("<div class='row'><div class='col-sm-1'></div><div class='col-sm-11'><h4><B>"+MainProgram.news.Get(result[i].Item1).GetTitle()+"</B></h4></div></div><br>");
-                        Response.Write("<div class='row'><div class='col-md-1'></div><div class='col-md-5'><p align='justify'>"+MainProgram.news.Get(result[i].Item1).GetContentSummary(result[i].Item2)+"</p></div><div class='col-md-6'><img class='img-circle' width='100' height='100' src="+MainProgram.news.Get(result[i].Item1).GetImageURL()+"></div></div>");
-                        Response.Write("<br><div class='row'><div class='col-sm-1'></div><div class='col-sm-10'><blockquote><a href="+MainProgram.news.Get(result[i].Item1).GetContentURL()+" target='_blank'><font size='2'>Read More>></font></a></blockquote></div></div>");
-                        Response.Write("<br>");
-                    }
-                }
-            }
-            else if (optradio == "KMP")
-            {
-                if (Matcher.kmpMatch(MainProgram.news.ToString(), keyword) == -1)
-                {
-                    Response.Write("<div class='row'><p align='center'>Search Not Found.</p></div>");
-                }
-                else
-                {
-                    Response.Write("<div class='row'><div class='col-sm-1'></div><div class='col-sm-11'><h5><B><I>Knuth-Morris-Pratt Algorithm</I></B></div></div>");
-                    result = MainProgram.news.GetSearchResultWithKMP(keyword);
-                    for(int i=0; i<result.Count; i++)
-                    {
-                        //Response.Write("<div>"+MainProgram.news.Get(result[i].Item1).GetContentSummary(result[i].Item2)+"</div>");
-                        Response.Write("<div class='row'><div class='col-sm-1'></div><div class='col-sm-11'><h4><B>"+MainProgram.news.Get(result[i].Item1).GetTitle()+"</B></h4></div></div><br>");
-                        Response.Write("<div class='row'><div class='col-md-1'></div><div class='col-md-5'><p align='justify'>"+MainProgram.news.Get(result[i].Item1).GetContentSummary(result[i].Item2)+"</p></div><div class='col-md-6'><img class='img-circle' width='100' height='100' src="+MainProgram.news.Get(result[i].Item1).GetImageURL()+"></div></div>");
-                        Response.Write("<br><div class='row'><div class='col-sm-1'></div><div class='col-sm-10'><blockquote><a href="+MainProgram.news.Get(result[i].Item1).GetContentURL()+" target='_blank'><font size='2'>Read More>></font></a></blockquote></div></div>");
-                        Response.Write("<br>");
-                    }
-                }
-                
-            }
-            else if (optradio == "Regex")
-            {
-                if (Matcher.regexMatch(MainProgram.news.ToString(), keyword) == -1)
-                {
-                    Response.Write("<div class='row'><p align='center'>Search Not Found.</p></div>");
-                }
-                else
-                {
-                    Response.Write("<div class='row'><div class='col-sm-1'></div><div class='col-sm-11'><h5><B><I>Regular Expression Algorithm</I></B></div></div>");
-                    result = MainProgram.news.GetSearchResultWithRegex(keyword);
-                    for(int i=0; i<result.Count; i++)
-                    {
-                        //Response.Write("<div>"+MainProgram.news.Get(result[i].Item1).GetContentSummary(result[i].Item2)+"</div>");
-                        Response.Write("<div class='row'><div class='col-sm-1'></div><div class='col-sm-11'><h4><B>"+MainProgram.news.Get(result[i].Item1).GetTitle()+"</B></h4></div></div><br>");
-                        Response.Write("<div class='row'><div class='col-md-1'></div><div class='col-md-5'><p align='justify'>"+MainProgram.news.Get(result[i].Item1).GetContentSummary(result[i].Item2)+"</p></div><div class='col-md-6'><img class='img-circle' width='100' height='100' src="+MainProgram.news.Get(result[i].Item1).GetImageURL()+"></div></div>");
-                        Response.Write("<br><div class='row'><div class='col-sm-1'></div><div class='col-sm-10'><blockquote><a href="+MainProgram.news.Get(result[i].Item1).GetContentURL()+" target='_blank'><font size='2'>Read More>></font></a></blockquote></div></div>");
-                        Response.Write("<br>");
-                    }
-                }
+                Response.Write("<div class='row'><p align='center'>Please input the keyword(s).</p></div>");
             }
             else
             {
-                Response.Write("<div class='row'><p align='center'>Choose One of The Algorithm.</p></div>");
+                if (optradio == "BoyerMoore")
+                {
+                    if (Matcher.bmMatch(MainProgram.news.ToString(), keyword) == -1)
+                    {
+                        Response.Write("<div class='row'><p align='center'>Search Not Found.</p></div>");
+                    }
+                    else
+                    {
+                        Response.Write("<div class='row'><div class='col-sm-1'></div><div class='col-sm-11'><h5><B><I>Boyer Moore Algorithm</I></B></div></div>");
+                        result = MainProgram.news.GetSearchResultWithBM(keyword);
+                        for (int i = 0; i < result.Count; i++)
+                        {
+                            Response.Write("<div class='row'><div class='col-sm-1'></div><div class='col-sm-11'><h4><B>" + MainProgram.news.Get(result[i].Item1).GetTitle() + "</B></h4></div></div><br>");
+                            Response.Write("<div class='row'><div class='col-md-1'></div><div class='col-md-5'><p align='justify'>" + MainProgram.news.Get(result[i].Item1).GetContentSummary(result[i].Item2) + "</p></div><div class='col-md-6'><img class='img-circle' width='100' height='100' src=" + MainProgram.news.Get(result[i].Item1).GetImageURL() + "></div></div>");
+                            if (MainProgram.news.Get(result[i].Item1).getLocation() == "")
+                            {
+                                Response.Write("<br><div class='row'><div class='col-sm-1'></div><div class='col-sm-10'><blockquote><a href=" + MainProgram.news.Get(result[i].Item1).GetContentURL() + " target='_blank'><font size='2'>Read More>></font></a></blockquote></div></div>");
+                            } else
+                            {
+                                Response.Write("<br><div class='row'><div class='col-sm-1'></div><div class='col-sm-10'><blockquote><a href=" + MainProgram.news.Get(result[i].Item1).GetContentURL() + " target='_blank'><font size='2'>Read More>></font></a><font size='2' color='white'>location</font><a href=" + MainProgram.news.Get(result[i].Item1).getGoogleMapsLink( MainProgram.news.Get(result[i].Item1).getLocation()) + " target='_blank'><img src='Map.png' height='40' width='40'></a></blockquote></div></div>");
+                            }
+                            Response.Write("<br>");
+                        }
+                    }
+                }
+                else if (optradio == "KMP")
+                {
+                    if (Matcher.kmpMatch(MainProgram.news.ToString(), keyword) == -1)
+                    {
+                        Response.Write("<div class='row'><p align='center'>Search Not Found.</p></div>");
+                    }
+                    else
+                    {
+                        Response.Write("<div class='row'><div class='col-sm-1'></div><div class='col-sm-11'><h5><B><I>Knuth-Morris-Pratt Algorithm</I></B></div></div>");
+                        result = MainProgram.news.GetSearchResultWithKMP(keyword);
+                        for (int i = 0; i < result.Count; i++)
+                        {
+                            Response.Write("<div class='row'><div class='col-sm-1'></div><div class='col-sm-11'><h4><B>" + MainProgram.news.Get(result[i].Item1).GetTitle() + "</B></h4></div></div><br>");
+                            Response.Write("<div class='row'><div class='col-md-1'></div><div class='col-md-5'><p align='justify'>" + MainProgram.news.Get(result[i].Item1).GetContentSummary(result[i].Item2) + "</p></div><div class='col-md-6'><img class='img-circle' width='100' height='100' src=" + MainProgram.news.Get(result[i].Item1).GetImageURL() + "></div></div>");
+                            if (MainProgram.news.Get(result[i].Item1).getLocation() == "")
+                            {
+                                Response.Write("<br><div class='row'><div class='col-sm-1'></div><div class='col-sm-10'><blockquote><a href=" + MainProgram.news.Get(result[i].Item1).GetContentURL() + " target='_blank'><font size='2'>Read More>></font></a></blockquote></div></div>");
+                            } else
+                            {
+                                Response.Write("<br><div class='row'><div class='col-sm-1'></div><div class='col-sm-10'><blockquote><a href=" + MainProgram.news.Get(result[i].Item1).GetContentURL() + " target='_blank'><font size='2'>Read More>></font></a><font size='2' color='white'>location</font><a href=" + MainProgram.news.Get(result[i].Item1).getGoogleMapsLink( MainProgram.news.Get(result[i].Item1).getLocation()) + " target='_blank'><img src='Map.png' height='40' width='40'></a></blockquote></div></div>");
+                            }
+                            Response.Write("<br>");
+                        }
+                    }
+
+                }
+                else if (optradio == "Regex")
+                {
+                    if (Matcher.regexMatch(MainProgram.news.ToString(), keyword) == -1)
+                    {
+                        Response.Write("<div class='row'><p align='center'>Search Not Found.</p></div>");
+                    }
+                    else
+                    {
+                        Response.Write("<div class='row'><div class='col-sm-1'></div><div class='col-sm-11'><h5><B><I>Regular Expression Algorithm</I></B></div></div>");
+                        result = MainProgram.news.GetSearchResultWithRegex(keyword);
+                        for (int i = 0; i < result.Count; i++)
+                        {
+                            Response.Write("<div class='row'><div class='col-sm-1'></div><div class='col-sm-11'><h4><B>" + MainProgram.news.Get(result[i].Item1).GetTitle() + "</B></h4></div></div><br>");
+                            Response.Write("<div class='row'><div class='col-md-1'></div><div class='col-md-5'><p align='justify'>" + MainProgram.news.Get(result[i].Item1).GetContentSummary(result[i].Item2) + "</p></div><div class='col-md-6'><img class='img-circle' width='100' height='100' src=" + MainProgram.news.Get(result[i].Item1).GetImageURL() + "></div></div>");
+                            if (MainProgram.news.Get(result[i].Item1).getLocation() == "")
+                            {
+                                Response.Write("<br><div class='row'><div class='col-sm-1'></div><div class='col-sm-10'><blockquote><a href=" + MainProgram.news.Get(result[i].Item1).GetContentURL() + " target='_blank'><font size='2'>Read More>></font></a></blockquote></div></div>");
+                            } else
+                            {
+                                Response.Write("<br><div class='row'><div class='col-sm-1'></div><div class='col-sm-10'><blockquote><a href=" + MainProgram.news.Get(result[i].Item1).GetContentURL() + " target='_blank'><font size='2'>Read More>></font></a><font size='2' color='white'>location</font><a href=" + MainProgram.news.Get(result[i].Item1).getGoogleMapsLink( MainProgram.news.Get(result[i].Item1).getLocation()) + " target='_blank'><img src='Map.png' height='40' width='40'></a></blockquote></div></div>");
+                            }
+                            Response.Write("<br>");
+                        }
+                    }
+                }
+                else
+                {
+                    Response.Write("<div class='row'><p align='center'>Choose One of The Algorithm.</p></div>");
+                }
             }
 
         %>
